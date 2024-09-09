@@ -22,31 +22,31 @@ fs.readFile('matriz.txt', 'utf8', (err, data) => {
 
     console.table(matrix);
 
-    let opIndex = 0;
-    while (length + opIndex < matrix.length && matrix[length + opIndex][0] != 0) {
-        let operation = matrix[length + opIndex][0];
-        let i = matrix[length + opIndex][1];
-        let j = matrix[length + opIndex][2];
+    let k = 0;
+    while (length + k < matrix.length && matrix[length + k][0] != 0) {
+        let operation = matrix[length + k][0];
+        let i = matrix[length + k][1];
+        let j = matrix[length + k][2];
 
         if (operation == 1) { 
             if (i < matrix.length && j < matrix.length) {
                 [matrix[i], matrix[j]] = [matrix[j], matrix[i]];
             }
         } else if (operation == 2) { 
-            let factor = matrix[length + opIndex][2]; 
+            let valor = matrix[length + k][2]; 
             if (i < matrix.length) {
-                matrix[i] = matrix[i].map(value => value * factor);
+                matrix[i] = matrix[i].map(value => value * valor);
             }
         } else if (operation == 3) { 
-            let factor = matrix[length + opIndex][3];
+            let valor = matrix[length + k][3];
             if (i < matrix.length && j < matrix.length) {
                 if (matrix[i].length == matrix[j].length) { 
-                    matrix[j] = matrix[j].map((value, idx) => value + matrix[i][idx] * factor);
+                    matrix[j] = matrix[j].map((value, idx) => value + matrix[i][idx] * valor);
                 }
             }
         }
         
-        opIndex++;
+        k++;
     }
 
 
