@@ -43,8 +43,6 @@ fs.readFile('matriz.txt', 'utf8', (err, data) => {
             if (i < matrix.length && j < matrix.length) {
                 if (matrix[i].length == matrix[j].length) { 
                     matrix[j] = matrix[j].map((value, idx) => value + matrix[i][idx] * factor);
-                } else {
-                    console.error('Rows have different lengths, cannot perform operation.');
                 }
             }
         }
