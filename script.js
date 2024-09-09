@@ -20,7 +20,6 @@ fs.readFile('matriz.txt', 'utf8', (err, data) => {
         a++;
     }
 
-    console.log('Matrix after reading from file:');
     console.table(matrix);
 
     let opIndex = 0;
@@ -50,6 +49,8 @@ fs.readFile('matriz.txt', 'utf8', (err, data) => {
         opIndex++;
     }
 
-    console.log('Matrix after applying operations:');
-    console.table(matrix);
+
+    for(let x = 0; x < length; x++){
+        console.log(matrix[x].join(" "))
+    }
 });
