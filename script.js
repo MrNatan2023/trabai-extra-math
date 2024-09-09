@@ -1,85 +1,57 @@
 const fs = require('fs');
-const prompt = require('prompt-sync')();
 
-let open = prompt("Digite um número que seja 1, 2 ou 3: ");
-let num = parseInt(open);
+var length = null;
+var matrix = [];
 
-if (!isNaN(num) && [1, 2, 3].includes(num)) {
-    fs.readFile('matriz.txt', 'utf8', (err, data) => {
-        if (err) {
-            console.error('error: ', err);
-            return;
-        }
+fs.readFile('matriz.txt', 'utf8', (err, data) => {
+    if (err) {
+        console.error('error: ', err);
+        return;
+    }
 
-        let lines = data.trim().split('\n');
-        let length = parseInt(lines[0]);
-        let matrix = [];
-        let i = 1;
+    let lines = data.trim().split('\n');
+    
+    length = parseInt(lines[0]);
+    let a = 1;
 
-        while (i < lines.length) {
-            let line = lines[i].trim().split(' ').map(Number);
-            matrix.push(line);
-            i++;
-        }
-        console.table(matrix);
+    while (a < lines.length && lines[a].trim()) {
+        let line = lines[a].trim().split(' ').map(Number);
+        matrix.push(line);
+        a++;
+    }
 
-        if (num == 1) {
-      
-            if (matrix.length >= 2) {
-                [matrix[0], matrix[1]] = [matrix[1], matrix[0]];
+    console.log('Matrix after reading from file:');
+    console.table(matrix);
+
+    let opIndex = 0;
+    while (length + opIndex < matrix.length && matrix[length + opIndex][0] != 0) {
+        let operation = matrix[length + opIndex][0];
+        let i = matrix[length + opIndex][1];
+        let j = matrix[length + opIndex][2];
+
+        if (operation == 1) { 
+            if (i < matrix.length && j < matrix.length) {
+                [matrix[i], matrix[j]] = [matrix[j], matrix[i]];
             }
-
-            for (let x = 0; x < length; x++) {
-                console.log(matrix[x].join(' '));
+        } else if (operation == 2) { 
+            let factor = matrix[length + opIndex][2]; 
+            if (i < matrix.length) {
+                matrix[i] = matrix[i].map(value => value * factor);
             }
-        }
-
-        if (num == 2) {
-            let value = null;
-            for (let x = 0; x < matrix.length; x++) {
-                for (let y = 0; y < matrix[x].length; y++) {
-                    if (!Number.isInteger(matrix[x][y])) {
-                        value = matrix[x][y];
-                        break;
-                    }
-                }
-                if (value !== null) break;
-            }
-
-            if (value !== null) {
-                for (let i = 0; i < matrix[0].length; i++) {
-                    matrix[0][i] *= value;
+        } else if (operation == 3) { 
+            let factor = matrix[length + opIndex][3];
+            if (i < matrix.length && j < matrix.length) {
+                if (matrix[i].length == matrix[j].length) { 
+                    matrix[j] = matrix[j].map((value, idx) => value + matrix[i][idx] * factor);
+                } else {
+                    console.error('Rows have different lengths, cannot perform operation.');
                 }
             }
-
-            for (let x = 0; x < length; x++) {
-                console.log(matrix[x].join(' '));
-            }
         }
+        
+        opIndex++;
+    }
 
-        if (num == 3) {
-            let value = null;
-            for (let x = 0; x < matrix.length; x++) {
-                for (let y = 0; y < matrix[x].length; y++) {
-                    if (!Number.isInteger(matrix[x][y])) {
-                        value = matrix[x][y];
-                        break;
-                    }
-                }
-                if (value !== null) break;
-            }
-
-            if (matrix.length >= 2) {
-                for (let x = 0; x < matrix[matrix.length - 1].length; x++) {
-                    matrix[matrix.length - 1][x] = (matrix[matrix.length - 2][x] * value) + matrix[matrix.length - 1][x];
-                }
-            }
-
-            for (let x = 0; x < length; x++) {
-                console.log(matrix[x].join(' '));
-            }
-        }
-    });
-} else {
-    console.log("Por favor, digite um número válido (1, 2 ou 3).");
-}
+    console.log('Matrix after applying operations:');
+    console.table(matrix);
+});
